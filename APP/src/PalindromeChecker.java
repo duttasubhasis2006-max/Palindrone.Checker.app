@@ -1,59 +1,27 @@
-import java.util.*;
-
-interface PalindromeStrategy {
-    boolean isPalindrome(String str);
-}
-
-class StackStrategy implements PalindromeStrategy {
-    public boolean isPalindrome(String str) {
-        Stack<Character> stack = new Stack<>();
-        for (char c : str.toCharArray()) {
-            stack.push(c);
-        }
-        for (char c : str.toCharArray()) {
-            if (c != stack.pop()) {
-                return false;
-            }
-        }
-        return true;
-    }
-}
-
-class DequeStrategy implements PalindromeStrategy {
-    public boolean isPalindrome(String str) {
-        Deque<Character> deque = new ArrayDeque<>();
-        for (char c : str.toCharArray()) {
-            deque.add(c);
-        }
-        while (deque.size() > 1) {
-            if (deque.pollFirst() != deque.pollLast()) {
-                return false;
-            }
-        }
-        return true;
-    }
-}
+import java.util.Scanner;
 
 public class PalindromeChecker {
 
-    static PalindromeStrategy strategy;
+    static boolean isPalindrome(String str) {
+        str = str.replaceAll("\\s+", "").toLowerCase();
+        int left = 0;
+        int right = str.length() - 1;
 
-    public static void setStrategy(PalindromeStrategy strategy) {
-        PalindromeChecker.strategy = strategy;
+        while (left < right) {
+            if (str.charAt(left) != str.charAt(right)) {
+                return false;
+            }
+            left++;
+            right--;
+        }
+        return true;
     }
 
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
         String input = sc.nextLine();
-        int choice = sc.nextInt();
 
-        if (choice == 1) {
-            setStrategy(new StackStrategy());
-        } else {
-            setStrategy(new DequeStrategy());
-        }
-
-        if (strategy.isPalindrome(input)) {
+        if (isPalindrome(input)) {
             System.out.println("Palindrome");
         } else {
             System.out.println("Not Palindrome");
